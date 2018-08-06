@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  VPC Peers for VPCs
+
+Parameters:
+  Sandbox1StackName:
+    Type: String
+  Sandbox2StackName:
+    Type: String
+
+Resources:
+  Sandbox1Sandbox2VpcPeer:
+    Type: "AWS::EC2::VPCPeeringConnection"
+    Properties:
+      PeerVpcId:
+        Fn::ImportValue: !Sub
+          - ${Sandbox2VpcStackName}-VPCID
+          - Sandbox2VpcStackName: !Ref Sandbox2StackName
+      VpcId:
+        Fn::ImportValue: !Sub
+          - ${Sandbox1VpcStackName}-VPCID
+          - Sandbox1VpcStackName: !Ref Sandbox1StackName
+      Tags:
+        - Key: Name
+          Value: Sandbox1andSandbox2VpcPeer
